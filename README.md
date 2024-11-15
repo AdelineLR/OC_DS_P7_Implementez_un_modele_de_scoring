@@ -1,4 +1,4 @@
-# OC_DS_P7_Implementez_un_modele_de_scoring
+# Implémentez un modele de scoring
 
 ## Mission
 "Prêt à dépenser" est une société financière qui propose des crédits à la consommation pour des personnes ayant peu ou pas du tout d'historique de prêt.
