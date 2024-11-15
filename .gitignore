@@ -2,7 +2,7 @@
 ressources/
 x_old/
 .ipynb_chekpoints/
-_pycache_/
+__pycache__/
 
 # mlflow data
 mlruns/
