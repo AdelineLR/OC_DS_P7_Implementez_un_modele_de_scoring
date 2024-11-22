@@ -1,0 +1,20 @@
+# Ignore the following folders
+ressources/
+x_old/
+modelisation/
+
+# Checkpoints Jupyter Notebook and __pycache__
+**/.ipynb_checkpoints/
+**__pycache__/
+*.pyc
+*.pyo
+
+# Ignore Jupyter Notebook
+*.ipynb
+
+# Ignore Markdown file
+*.md
+
+# Ignore git file and folder
+.git/
+.gitignore
