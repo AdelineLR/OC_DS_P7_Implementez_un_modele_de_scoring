@@ -1,13 +1,15 @@
 # Ignore the following folders
 ressources/
 x_old/
-.ipynb_chekpoints/
-__pycache__/
+
+# Checkpoints Jupyter Notebook and __pycache__
+**/.ipynb_checkpoints/
+**__pycache__/
 
 # mlflow data
-mlruns/
-mlflow.db
+**/mlruns/
+**/mlflow.db
 
 # data
-input/
-df_final.pkl
+**/input/
+**/df_final.pkl
