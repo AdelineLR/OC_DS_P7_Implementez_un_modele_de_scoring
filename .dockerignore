@@ -2,6 +2,7 @@
 ressources/
 x_old/
 modelisation/
+mlruns/
 
 # Checkpoints Jupyter Notebook and __pycache__
 **/.ipynb_checkpoints/
@@ -18,3 +19,5 @@ modelisation/
 # Ignore git file and folder
 .git/
 .gitignore
+
+*.db
