@@ -943,6 +943,38 @@ def load_model(model_name):
 
     return model, latest_version
 
+def get_threshold(experiment_name, parent_run_name, run_name):
+    """!
+    @brief: Get run metrics logged in Mlflow
+    @param experiment_name : str, name of the experiment
+    @param parent_run_name : str, name of parent run
+    @param run_name : str, name of run   
+    """
+    client = MlflowClient()
+
+    # Get experience
+    experiment = client.get_experiment_by_name(experiment_name)
+    runs = client.search_runs(experiment_ids=[experiment.experiment_id])
+
+    # Get parent_run_id
+    parent_run_id = None
+    for run in runs:
+        if run.info.run_name == parent_run_name:
+            parent_run_id = run.info.run_id
+            break 
+
+
+    # Get child run = `run_name`
+    for run in runs:
+        if (
+            run.data.tags.get('mlflow.parentRunId') == parent_run_id 
+            and run.info.run_name == run_name
+        ):
+            # Get optimal threshold
+            threshold_value = run.data.metrics.get("threshold_optimal")
+            
+    return threshold_value
+
 def load_model_scaler(model_name):
     """!
     @brief: Load the latest version of a model from the MLflow model registry.
