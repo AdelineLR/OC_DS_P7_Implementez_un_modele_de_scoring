@@ -3,6 +3,7 @@ ressources/
 x_old/
 modelisation/
 mlruns/
+AWS_keys/
 
 # Checkpoints Jupyter Notebook and __pycache__
 **/.ipynb_checkpoints/

@@ -1,6 +1,7 @@
 # Ignore the following folders
 ressources/
 x_old/
+AWS_keys/
 
 # Checkpoints Jupyter Notebook and __pycache__
 **/.ipynb_checkpoints/
