@@ -4,30 +4,25 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Dict
-import os
-import subprocess
-import mlflow.sklearn
-import time
-import numpy as np
 import pandas as pd
 from joblib import load
 import pickle
 
 app = FastAPI()
 
-# load model
+# Model loading
 pipeline_path = 'best_model_pipeline.joblib'
 pipeline = load(pipeline_path)
 
-# Extract the model and scaler from the pipeline
+# Extract model and scaler
 model = pipeline.named_steps['classification']
 scaler = pipeline.named_steps['scaling']
 
-# Load threshold value
+# Threshold loading
 with open('metric_dict.pkl', 'rb') as file:
     metric_dict = pickle.load(file)
+    threshold_value = metric_dict['threshold']
 
-threshold_value = metric_dict['threshold']
 
 class PredictionInput(BaseModel):
     features: Dict[str, float]
@@ -39,8 +34,41 @@ async def root():
 @app.post('/predict')
 def predict(input_data: PredictionInput):
     """Predict using the loaded model."""
-    
-    try:
+    try:     
+        # Ensure the 'features' dictionary is not empty
+        if not input_data.features:
+            raise HTTPException(status_code=422, detail="The 'features' dictionary cannot be empty.")
+        
+        # Ensure the features names are valid
+        valid_feature_names = ['EXT_SOURCE_2', 'PAYMENT_RATE', 'EXT_SOURCE_3', 'DAYS_BIRTH',
+       'DAYS_EMPLOYED', 'DAYS_REGISTRATION', 'DAYS_ID_PUBLISH',
+       'ANNUITY_INCOME_PERCENT', 'INSTAL_DBD_MEAN', 'DAYS_LAST_PHONE_CHANGE',
+       'AMT_ANNUITY', 'ACTIVE_DAYS_CREDIT_UPDATE_MEAN',
+       'REGION_POPULATION_RELATIVE', 'INSTAL_DAYS_ENTRY_PAYMENT_MAX',
+       'CLOSED_DAYS_CREDIT_MAX', 'ACTIVE_DAYS_CREDIT_ENDDATE_MIN',
+       'INSTAL_AMT_PAYMENT_MIN', 'PREV_APP_CREDIT_PERC_VAR',
+       'BURO_DAYS_CREDIT_VAR', 'INSTAL_DBD_SUM', 'INSTAL_DBD_MAX',
+       'CLOSED_DAYS_CREDIT_ENDDATE_MAX', 'BURO_AMT_CREDIT_MAX_OVERDUE_MEAN',
+       'INCOME_PER_PERSON', 'ACTIVE_DAYS_CREDIT_MAX',
+       'CLOSED_AMT_CREDIT_SUM_MEAN', 'PREV_HOUR_APPR_PROCESS_START_MEAN',
+       'INSTAL_DAYS_ENTRY_PAYMENT_MEAN',
+       'POS_NAME_CONTRACT_STATUS_Active_MEAN', 'TOTALAREA_MODE',
+       'CLOSED_DAYS_CREDIT_UPDATE_MEAN', 'ACTIVE_AMT_CREDIT_SUM_DEBT_MEAN',
+       'BURO_DAYS_CREDIT_MEAN', 'PREV_CNT_PAYMENT_MEAN',
+       'INSTAL_DAYS_ENTRY_PAYMENT_SUM', 'CLOSED_AMT_CREDIT_SUM_SUM',
+       'INSTAL_AMT_PAYMENT_MEAN', 'PREV_APP_CREDIT_PERC_MEAN',
+       'POS_MONTHS_BALANCE_SIZE', 'INSTAL_DPD_MEAN', 'PREV_AMT_ANNUITY_MIN',
+       'PREV_AMT_ANNUITY_MEAN', 'PREV_NAME_TYPE_SUITE_Unaccompanied_MEAN',
+       'BURO_DAYS_CREDIT_ENDDATE_MIN', 'HOUR_APPR_PROCESS_START',
+       'INSTAL_AMT_INSTALMENT_MAX', 'INSTAL_PAYMENT_PERC_VAR',
+       'PREV_NAME_YIELD_GROUP_middle_MEAN', 'PREV_RATE_DOWN_PAYMENT_MEAN',
+       'APPROVED_AMT_DOWN_PAYMENT_MAX'
+       ]
+
+        if not all(key in valid_feature_names for key in input_data.features.keys()):
+            raise HTTPException(status_code=422, detail="Invalid feature names.")
+                
+        # Process input data
         features = input_data.features
         data = pd.DataFrame([features])
 
@@ -49,13 +77,17 @@ def predict(input_data: PredictionInput):
         probabilities = model.predict_proba(data_scaled)
         predicted_class = int(probabilities[0][1] >= threshold_value)
 
-        if predicted_class==0:
+        if predicted_class == 0:
             status = 'Accepted'
         else:
             status = 'Rejected'
-        
+
+    except HTTPException as e:
+        # Re-raise HTTP exceptions
+        raise e
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        # Catch unexpected errors and return a meaningful error message
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
     return {
         "prediction": status,
@@ -65,6 +97,7 @@ def predict(input_data: PredictionInput):
             "class_1": probabilities[0][1]
         }
     }
+
 
 
 if __name__ == '__main__':
