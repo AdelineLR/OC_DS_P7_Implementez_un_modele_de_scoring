@@ -18,30 +18,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Clone the repository
+    # Step 1: Check out code
     - name: Check out code
       uses: actions/checkout@v3
 
-    # Step 2: Set up Python environment
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-
-    # Step 3: Install dependencies
-    - name: Install dependencies
+    # Step 2: Build Docker Image
+    - name: Build Docker image
       run: |
-        python -m pip install --upgrade pip
-        pip install -r app/requirements.txt
+        docker build -t my_api_image:latest .
 
-    # Step 4: Run tests
-    - name: Run tests
+    # Step 3: Run API container and execute tests
+    - name: Run tests inside Docker container
       run: |
-        pytest tests/test_api.py
-      env:
-        ENVIRONMENT: "test" 
+        # Start container for tests
+        docker run -d -p 8000:8000 --name test_api_container my_api_image:latest
+        
+        # Wait until API starts
+        sleep 10
 
-    # Step 5: Configure AWS credentials
+        # Run test with local host
+        docker exec test_api_container pytest tests/test_api.py \
+          --base-url http://127.0.0.1:8000
+
+        # Stop and delete container after tests
+        docker stop test_api_container && docker rm test_api_container
+
+    # Step 4: Configure AWS credentials
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1.7.0
       with:
@@ -49,7 +51,7 @@ jobs:
         role-session-name: GitHub_to_AWS_via_FederatedOIDC
         aws-region: ${{ env.AWS_REGION }}
 
-    # Step 6: Connect to EC2 via SSH and deploy the application
+    # Step 5: Deploy to EC2
     - name: Deploy to EC2
       uses: appleboy/ssh-action@v0.1.7
       with:
@@ -58,19 +60,13 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         port: 22
         script: |
-          # Update packages and install Docker (if not already installed)
+          # Installer Docker et démarrer le service
           sudo yum update -y
           sudo yum install -y docker
           sudo usermod -aG docker ec2-user
           sudo service docker start
 
-          # Log in to Docker Hub and pull the latest image
+          # Récupérer et démarrer le conteneur
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker pull adrylr/p7_scoring_app:latest
-
-          # Stop and remove any existing containers using the same image
-          docker ps -q --filter "ancestor=adrylr/p7_scoring_app:latest" | xargs -r docker stop
-          docker ps -q --filter "ancestor=adrylr/p7_scoring_app:latest" | xargs -r docker rm
-
-          # Run the Docker container
-          docker run -d -p 80:8000 adrylr/p7_scoring_app:latest
+          docker pull my_api_image:latest
+          docker run -d -p 80:8000 my_api_image:latest

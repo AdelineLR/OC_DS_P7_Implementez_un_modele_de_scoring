@@ -5,7 +5,7 @@ from unittest.mock import patch
 from fastapi.exceptions import HTTPException
 
 # API base URL
-BASE_URL = "http://100.26.100.225"
+BASE_URL = "http://127.0.0.1:8000"
 
 def test_api_status():
     """
