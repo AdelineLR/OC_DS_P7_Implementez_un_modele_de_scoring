@@ -37,8 +37,7 @@ jobs:
         sleep 10
 
         # Run test with local host
-        docker exec test_api_container pytest tests/test_api.py \
-          --base-url http://127.0.0.1:8000
+        docker exec test_api_container pytest tests/test_api.py
 
         # Stop and delete container after tests
         docker stop test_api_container && docker rm test_api_container
