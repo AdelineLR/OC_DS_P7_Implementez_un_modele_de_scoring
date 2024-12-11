@@ -3,7 +3,6 @@ ressources/
 x_old/
 modelisation/
 mlruns/
-AWS_keys/
 
 # Checkpoints Jupyter Notebook and __pycache__
 **/.ipynb_checkpoints/
@@ -19,6 +18,7 @@ AWS_keys/
 
 # Ignore git file and folder
 .git/
+.github/
 .gitignore
 
 *.db
