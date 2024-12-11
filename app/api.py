@@ -11,7 +11,7 @@ import pickle
 app = FastAPI()
 
 # Model loading
-pipeline_path = 'best_model_pipeline.joblib'
+pipeline_path = 'app/best_model_pipeline.joblib'
 pipeline = load(pipeline_path)
 
 # Extract model and scaler
@@ -19,7 +19,7 @@ model = pipeline.named_steps['classification']
 scaler = pipeline.named_steps['scaling']
 
 # Threshold loading
-with open('metric_dict.pkl', 'rb') as file:
+with open('app/metric_dict.pkl', 'rb') as file:
     metric_dict = pickle.load(file)
     threshold_value = metric_dict['threshold']
 
