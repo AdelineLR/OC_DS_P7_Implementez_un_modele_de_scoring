@@ -3,9 +3,10 @@ import requests
 import pandas as pd
 from unittest.mock import patch
 from fastapi.exceptions import HTTPException
+import os
 
 # API base URL
-BASE_URL = "http://127.0.0.1:8000"
+BASE_URL = os.getenv("BASE_URL", "http://127.0.0.1:8000")
 
 def test_api_status():
     """
