@@ -37,7 +37,7 @@ jobs:
         sleep 5
 
         # Run tests against the running API
-        docker exec test_api_container pytest tests/test_api.py
+        docker exec test_api_container pytest /app/tests/test_api.py
 
         # Stop and remove the container
         docker stop test_api_container && docker rm test_api_container
