@@ -15,7 +15,7 @@ Mettre en œuvre une approche globale MLOps de bout en bout, du tracking des exp
 * [Données](https://www.kaggle.com/c/home-credit-default-risk/data)
 
 ## Structure du repository
-OC_DS_P7_Implementez_un_modele_de_scoring/
+`OC_DS_P7_Implementez_un_modele_de_scoring/
 ├── .github/worflows/
 │   └── deploy.yml                                              <- GitHub actions
 ├── app/                                                        <- API code
@@ -36,13 +36,11 @@ OC_DS_P7_Implementez_un_modele_de_scoring/
 ├── .gitignore
 ├── Dockerfile                                                  <- Code to build API docker image
 ├── README.md
-└── test_api.ipynb                                              <- Notebook for API testing
+└── test_api.ipynb                                              <- Notebook for API testing`
 
 
 ## Workflow modélisation
-
- ![alt text](modelisation_workflow.png)
+![modelisation_workflow](https://github.com/user-attachments/assets/27d858e8-1c0c-4486-bfe5-e7ed7773fab2)
 
 ## Pipeline de déploiement
-
-![alt text](pipeline.png) 
+![pipeline](https://github.com/user-attachments/assets/33e80b0d-1017-430b-b323-60210dd51e95)
