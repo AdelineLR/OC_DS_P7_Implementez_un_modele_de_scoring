@@ -218,9 +218,6 @@ def encode_categorical_columns(df):
 
 
 
-"""
- 
-"""
 @contextmanager
 def timer(title):
     t0 = time.time()
@@ -511,6 +508,7 @@ def filter_missing_val(df, threshold):
     columns_to_keep = missing_values_percentage[missing_values_percentage < threshold].index
     df_filtered = df[columns_to_keep]
     return df_filtered
+
 """
 Feature selection
 """
