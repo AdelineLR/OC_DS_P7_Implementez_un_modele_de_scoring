@@ -15,29 +15,7 @@ Mettre en œuvre une approche globale MLOps de bout en bout, du tracking des exp
 * [Données](https://www.kaggle.com/c/home-credit-default-risk/data)
 
 ## Structure du repository
-`OC_DS_P7_Implementez_un_modele_de_scoring/
-├── .github/worflows/
-│   └── deploy.yml                                              <- GitHub actions
-├── app/                                                        <- API code
-│   ├── api.py
-│   ├── best_model_pipeline.joblib
-│   ├── metric_dict.pkl
-│   └── requirements.txt
-├── modelisation/                                               <- Exploratory Data Analysis, Modelisation, Data Drit
-│   ├── LeRay_Adeline_2.1_Notebook_EDA_102024.ipynb
-│   ├── LeRay_Adeline_2.2_Notebook_modelisation_102024.ipynb
-│   ├── LeRay_Adeline_2_3_preprocess_functions_102024.py
-│   ├── LeRay_Adeline_2_4_modelisation_functions_102024.py
-│   └── data_drift_report.html
-├── tests/                                                      <- API unit tests   
-│   ├── test_api.py
-│   └── test_cases.csv 
-├── .dockerignore                                               
-├── .gitignore
-├── Dockerfile                                                  <- Code to build API docker image
-├── README.md
-└── test_api.ipynb                                              <- Notebook for API testing`
-
+![structure_folder](https://github.com/user-attachments/assets/aa9b52e6-c6f3-40af-bc16-f6165f2b4887)
 
 ## Workflow modélisation
 ![modelisation_workflow](https://github.com/user-attachments/assets/27d858e8-1c0c-4486-bfe5-e7ed7773fab2)
