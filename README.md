@@ -13,6 +13,7 @@ La mission consiste à :
 Mettre en œuvre une approche globale MLOps de bout en bout, du tracking des expérimentations à l’analyse en production du data drift.
 
 * [Données](https://www.kaggle.com/c/home-credit-default-risk/data)
+![image](https://storage.googleapis.com/kaggle-media/competitions/home-credit/home_credit.png)
 
 ## Structure du repository
 ![structure_folder](https://github.com/user-attachments/assets/aa9b52e6-c6f3-40af-bc16-f6165f2b4887)
