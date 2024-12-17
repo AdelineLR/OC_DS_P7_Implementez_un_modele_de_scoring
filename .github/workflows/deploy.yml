@@ -80,14 +80,15 @@ jobs:
 
           # Log in to Docker Hub and pull the latest image
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          # Stop and remove any existing containers using the same image
-          docker ps -q --filter "ancestor=adrylr/p7_scoring_app:latest" | xargs -r docker stop
-          docker ps -q --filter "ancestor=adrylr/p7_scoring_app:latest" | xargs -r docker rm
           docker pull adrylr/p7_scoring_app:latest
 
           # Stop and remove any existing containers using the same image
-          docker ps -q --filter "ancestor=adrylr/p7_scoring_app:latest" | xargs -r docker stop
-          docker ps -q --filter "ancestor=adrylr/p7_scoring_app:latest" | xargs -r docker rm
+          docker ps -aq --filter "ancestor=adrylr/p7_scoring_app:latest" | xargs -r docker stop
+          docker ps -aq --filter "ancestor=adrylr/p7_scoring_app:latest" | xargs -r docker rm
+
+          # Prune unused images and volumes
+          docker image prune -a -f
+          docker volume prune -f
 
           # Run the Docker container
           docker run -d -p 80:8000 adrylr/p7_scoring_app:latest
