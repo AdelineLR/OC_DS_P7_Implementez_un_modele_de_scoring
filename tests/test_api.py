@@ -66,7 +66,7 @@ def test_prediction_response_fields():
     json_response = response.json()
     
     # Check if the required fields are present
-    required_fields = ['prediction', 'predicted_class', 'probabilities']
+    required_fields = ['prediction', 'predicted_class', 'probabilities', "shap_values"]
     for field in required_fields:
         assert field in json_response, f"Expected field '{field}' is missing from the response"
     
@@ -88,6 +88,23 @@ def test_prediction_response_fields():
         assert isinstance(json_response['probabilities'][key], float), (
             f"Expected 'probabilities[{key}]' to be a float, but got {type(json_response['probabilities'][key])}"
         )
+    
+    # Check if 'shap_values' is a dictionary with required keys
+    assert isinstance(json_response['shap_values'], dict), "'shap_values' should be a dictionary"
+    shap_values_keys = ['base_value', 'shap_values', 'input_data']
+    for key in shap_values_keys:
+        assert key in json_response['shap_values'], f"Expected key '{key}' is missing from 'shap_values'"
+
+    # Check types for each key
+    assert isinstance(json_response['shap_values']['base_value'], float), (
+        f"Expected 'shap_values[base_value]' to be a float, but got {type(json_response['shap_values']['base_value'])}"
+    )
+    assert isinstance(json_response['shap_values']['shap_values'], list), (
+        f"Expected 'shap_values[shap_values]' to be a list, but got {type(json_response['shap_values']['shap_values'])}"
+    )
+    assert isinstance(json_response['shap_values']['input_data'], list), (
+        f"Expected 'shap_values[input_data]' to be a list, but got {type(json_response['shap_values']['input_data'])}"
+    )
 
 
 def test_predict_invalid_data():

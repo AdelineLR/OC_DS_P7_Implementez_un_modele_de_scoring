@@ -87,8 +87,14 @@ def predict(input_data: PredictionInput):
             status = 'Rejected'
 
         # Local feature importance - shap values
-        shap_value = explainer(data_scaled.reshape(1, -1))
-        shap_value.feature_name = features
+        shap_values = explainer(data_scaled.reshape(1, -1))
+        shap_values_filtered = shap_values[0][...,0]
+
+        shap_values_json = {
+            "base_value": shap_values_filtered.base_values.tolist(),
+            "shap_values": shap_values_filtered.values.tolist(),
+            "input_data": shap_values_filtered.data.tolist()
+        }
 
     except HTTPException as e:
         # Re-raise HTTP exceptions
@@ -104,7 +110,7 @@ def predict(input_data: PredictionInput):
             "class_0": probabilities[0][0],
             "class_1": probabilities[0][1]
         },
-        "shap_values" : shap_value
+        "shap_values" : shap_values_json
     }
 
 
