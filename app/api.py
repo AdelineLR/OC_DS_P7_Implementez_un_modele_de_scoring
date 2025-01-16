@@ -25,8 +25,8 @@ with open('app/metric_dict.pkl', 'rb') as file:
     threshold_value = metric_dict['threshold']
 
 # Shap Explainer loading
-with open('app/explainer.pkl', 'rb') as file:
-    explainer = pickle.load(file)
+explainer_path = 'app/explainer.joblib'
+explainer = load(explainer_path)
 
 class PredictionInput(BaseModel):
     features: Dict[str, float]
