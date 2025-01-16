@@ -7,6 +7,7 @@ from typing import Dict
 import pandas as pd
 from joblib import load
 import pickle
+import shap
 
 app = FastAPI()
 
@@ -23,6 +24,9 @@ with open('app/metric_dict.pkl', 'rb') as file:
     metric_dict = pickle.load(file)
     threshold_value = metric_dict['threshold']
 
+# Shap Explainer loading
+with open('app/explainer.pkl', 'rb') as file:
+    explainer = pickle.load(file)
 
 class PredictionInput(BaseModel):
     features: Dict[str, float]
@@ -82,6 +86,10 @@ def predict(input_data: PredictionInput):
         else:
             status = 'Rejected'
 
+        # Local feature importance - shap values
+        shap_value = explainer(data_scaled.reshape(1, -1))
+        shap_value.feature_name = features
+
     except HTTPException as e:
         # Re-raise HTTP exceptions
         raise e
@@ -95,7 +103,8 @@ def predict(input_data: PredictionInput):
         "probabilities": {
             "class_0": probabilities[0][0],
             "class_1": probabilities[0][1]
-        }
+        },
+        "shap_values" : shap_value
     }
 
 
