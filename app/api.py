@@ -87,8 +87,10 @@ def predict(input_data: PredictionInput):
             status = 'Rejected'
 
         # Local feature importance - shap values
-        shap_values = explainer(data_scaled.reshape(1, -1))
-        shap_values_filtered = shap_values[0][...,0]
+        data_imputed = data.fillna(0)
+        data_imputed_scaled = scaler.transform(data_imputed)
+        shap_values = explainer(data_imputed_scaled.reshape(1, -1))
+        shap_values_filtered = shap_values[0][...,1]
 
         shap_values_json = {
             "base_value": shap_values_filtered.base_values.tolist(),
