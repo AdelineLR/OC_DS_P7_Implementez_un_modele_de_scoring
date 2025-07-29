@@ -30,6 +30,5 @@ Un système complet de scoring crédit, transparent et accessible, déployé sur
 ![modelisation_workflow](https://github.com/user-attachments/assets/27d858e8-1c0c-4486-bfe5-e7ed7773fab2)
 
 ## Pipeline de déploiement
-![pipeline_deploiement]("C:\Users\Adeline\Documents\5-OpenClassrooms\Parcours DS\P8_Dashboard_Veille_technique\Pipeline_API_dashboard.png")
-
+![pipeline_deploiement](https://github.com/user-attachments/assets/46648c05-633b-415d-a699-268af3c1d6e7)
 
